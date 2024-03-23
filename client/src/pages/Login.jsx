@@ -43,6 +43,17 @@ export default function Login() {
 			"_self"
 		);
   };
+  window.addEventListener("DOMContentLoaded", () => {
+    console.log('here..')
+    // Check if the URL contains a token parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    
+    // If a token is present, store it in localStorage
+    if (token) {
+      localStorage.setItem('token', token);
+    }
+  });
 
   const handleLinkedInSignUp = () => {
     window.open(

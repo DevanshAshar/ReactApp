@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios'
 import Layout from '../components/Layout/Layout';
 import toast from 'react-hot-toast';
+import Cookies from 'js-cookie';
 import { useAuth } from '../context/auth';
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -10,18 +11,23 @@ export default function SignUp() {
     username: '',
     email: '',
     password: '',
+    role:''
   });
   const [auth,setAuth]=useAuth()
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'role') {
+      setRole(value);
+    }
     setFormData({ ...formData, [name]: value });
   };
-
+  
+  const [role, setRole] = useState('');
   const handleSubmit = async(e) => {
     e.preventDefault();
     const {username,firstName,lastName,email,password}=formData
     try {
-      const {data}=await axios.post('http://localhost:8080/user/newUser',{username,firstName,lastName,email,password})
+      const {data}=await axios.post('http://localhost:8080/user/newUser',{username,firstName,lastName,email,password,role})
       setAuth({
         ...auth,
         user:data.register,
@@ -35,6 +41,9 @@ export default function SignUp() {
     }
   };
   const handleGoogleSignUp = () => {
+    if(!role)
+    return toast.error('Please provide role')
+    Cookies.set('role', role);
     window.open(
 			`http://localhost:8080/auth/google/callback`,
 			"_self"
@@ -43,11 +52,10 @@ export default function SignUp() {
 
   const handleLinkedInSignUp = () => {
     window.open(
-      `http://localhost:8080/auth/linkedin/callback`,
+      `http://localhost:8080/auth/linkedin/callback?role=${role}`,
       "_self"
     );
   };
-
   return (
     <Layout>
       <div className="signup-container" style={{ backgroundColor: 'grey' }}>
@@ -98,6 +106,27 @@ export default function SignUp() {
             style={{ backgroundColor: '#2c3e50' }}
             required
           />
+          <div>
+  <input
+    type="radio"
+    id="employee"
+    name="role"
+    value="employee"
+    checked={role === 'employee'}
+    onChange={handleChange}
+  />
+  <label htmlFor="employee">Employee</label>
+  <input
+    type="radio"
+    id="recruiter"
+    name="role"
+    value="recruiter"
+    checked={role === 'recruiter'}
+    onChange={handleChange}
+  />
+  <label htmlFor="recruiter">Recruiter</label>
+</div>
+
           <button type="submit">Sign Up</button>
         </form>
         <div className="social-signup" style={{display: 'flex', justifyContent: 'center',marginTop:'10px'}}>

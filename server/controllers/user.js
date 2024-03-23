@@ -3,13 +3,14 @@ const jwt=require('jsonwebtoken')
 const User=require('../models/user')
 const userRegister = async(req,res) => {
     try{
-        const {firstName,lastName,username,email,password}=req.body
+        const {firstName,lastName,username,email,password,role}=req.body
         const register = await User.create({
             firstName:firstName,
             lastName:lastName,
             username:username,
             email:email,
-            password:await bcrypt.hash(password,9)
+            password:await bcrypt.hash(password,9),
+            role:role
         });
         await register.save();
         const token = jwt.sign({id:data.id},process.env.SECRET_KEY);

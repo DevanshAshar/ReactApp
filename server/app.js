@@ -63,10 +63,21 @@ fastify.get('/auth/google/callback',
         firstName:user.name.givenName,
         lastName:user.name.familyName,
         username:user.displayName,
-        email:user.emails[0].value
+        email:user.emails[0].value,
+        role:req.cookies.role
     });
-    await register.save();}
-      res.redirect(`http://localhost:3000?token=${sessionId}`);
+    await register.save();
+    res.header('Set-Cookie', [
+      `user=${JSON.stringify(register)}; Path=/;`
+    ]);
+  }
+    else
+    {
+      res.header('Set-Cookie', [
+        `user=${JSON.stringify(checkUser)}; Path=/;`
+      ]);
+    }
+      res.redirect(`http://localhost:3000`);
     }
 )
 fastify.get('/auth/linkedin/callback',
