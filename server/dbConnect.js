@@ -1,8 +1,5 @@
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize(process.env.DATABASE, 'postgres', process.env.PASSWORD, {
-    host: 'localhost',
-    dialect: 'postgres'
-  });
+const sequelize = new Sequelize(process.env.DATABASE_URL)
 const connect=async()=>{
 try {
     await sequelize.authenticate();

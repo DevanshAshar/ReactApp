@@ -9,7 +9,30 @@ const Job= sequelize.define('Job', {
     },
     role: {
       type: DataTypes.STRING
-    }
+    },
+    salary:{
+        type:DataTypes.INTEGER
+    },
+    workLoc:{
+        type:DataTypes.STRING //remote hybrid onsite
+    },
+    basedOutOff:{
+        type:DataTypes.STRING
+    },
+    timeOfPosting:{
+        type:DataTypes.TIME
+    },
+    jobDesc:{
+        type:DataTypes.STRING
+    },
+    skillsReqd:{
+        type:DataTypes.ARRAY(DataTypes.STRING)
+    },
+    totalApplicants:{
+        type:DataTypes.STRING
+    },
+    lat:{type:DataTypes.STRING},
+    long:{type:DataTypes.STRING}
   },{
     timestamps: false
 } 

@@ -3,15 +3,17 @@ const jwt=require('jsonwebtoken')
 const User=require('../models/user')
 const userRegister = async(req,res) => {
     try{
-        const {firstName,lastName,email,password}=req.body
+        const {firstName,lastName,username,email,password}=req.body
         const register = await User.create({
             firstName:firstName,
             lastName:lastName,
+            username:username,
             email:email,
             password:await bcrypt.hash(password,9)
         });
         await register.save();
-        res.code(200).send({message:'Success'});
+        const token = jwt.sign({id:data.id},process.env.SECRET_KEY);
+        res.code(200).send({message:'Success',user:register,token:token});
     }catch(err){
         res.code(400).send(err.message);
     }
@@ -28,7 +30,7 @@ const userLogin=async(req,res)=>{
             const password_valid = await bcrypt.compare(password,data.password);
             if(password_valid){
                 const token = jwt.sign({id:data.id},process.env.SECRET_KEY);
-                res.status(200).send({token: token});
+                res.status(200).send({user:data,token: token});
             }else{
                 res.status(400).send({message:'Incorrect password'});
             }
@@ -39,6 +41,13 @@ const userLogin=async(req,res)=>{
         res.code(400).send(error.message);
     }
 }
+const auth = async (req, res) => {
+    try {
+      res.status(200).send({ user: userData });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  };
 const getParticularUser=async(req,res)=>{
     try {
         // console.log(userData)
@@ -61,4 +70,4 @@ const getUsers=async(req,res)=>{
     }
 }
 
-module.exports={userRegister,getUsers,userLogin,getParticularUser}
+module.exports={userRegister,getUsers,userLogin,getParticularUser,auth}

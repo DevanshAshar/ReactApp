@@ -1,38 +1,339 @@
-.App {
+* {
+  font-family: "Quicksand", sans-serif;
+}
+:root {
+  --default-background-color: #2c3e50; 
+}
+body {
+  background-color: var(--default-background-color);
+}
+::-webkit-scrollbar {
+  background: transparent;
+  width: 0.2em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #b5d0ff;
+  border-radius: 100vw;
+}
+
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+
+#root {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  scroll-behavior: smooth;
+}
+
+footer {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+nav a.active {
+  font-weight: bold;
+  color: #af99ff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.form-input:focus-within:focus-within label {
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.281);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+main.main-content {
+  display: grid;
+  /* grid-auto-rows: 1fr; */
+  overflow-x: hidden;
+  height: 100%;
+}
+
+.hero {
+  display: grid;
+  /* padding: 5rem 0; */
+  height: 90vh;
+  color: #af99ff;
+  position: relative;
+  grid-template-columns: auto 1fr;
+  place-items: center;
+}
+
+#Puzzles {
+  height: 90%;
+  /* outline: 2px solid hotpink; */
+  --duration: 500ms;
+  --delay: 200ms;
+  --offset: 200ms;
+}
+
+.piece-1 {
+  translate: 37.5% 12.5%;
+  animation: makePuzzle var(--duration) ease-out calc(var(--delay) * 1) forwards;
+}
+.piece-2 {
+  translate: 12.5% 12.5%;
+  animation: makePuzzle var(--duration) ease-out calc(var(--delay) * 2) forwards;
+}
+.piece-3 {
+  translate: 37.5% 37.5%;
+  animation: makePuzzle var(--duration) ease-out calc(var(--delay) * 3) forwards;
+}
+.piece-4 {
+  translate: 12.5% 37.5%;
+  animation: makePuzzle var(--duration) ease-out calc(var(--delay) * 4) forwards;
+}
+
+@keyframes makePuzzle {
+  to {
+    translate: 25% 25%;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.puzzle-text-1 {
+  translate: -64px -64px;
+  opacity: 0;
+  animation: fadePuzzleText var(--duration) ease-out calc(var(--delay) * 1 + var(--offset)) forwards;
+}
+.puzzle-text-2 {
+  translate: 64px -64px;
+  opacity: 0;
+  animation: fadePuzzleText var(--duration) ease-out calc(var(--delay) * 2 + var(--offset)) forwards;
+}
+.puzzle-text-3 {
+  translate: 64px 64px;
+  opacity: 0;
+  animation: fadePuzzleText var(--duration) ease-out calc(var(--delay) * 3 + var(--offset)) forwards;
+}
+.puzzle-text-4 {
+  translate: -64px 64px;
+  opacity: 0;
+  animation: fadePuzzleText var(--duration) ease-out calc(var(--delay) * 4 + var(--offset)) forwards;
 }
 
-.App-link {
-  color: #61dafb;
+@keyframes fadePuzzleText {
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+.hero-content {
+  margin-left: 3rem;
 }
 
-@keyframes App-logo-spin {
-  from {
+.hero-header {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.hero-img {
+  position: absolute;
+  object-position: center;
+  object-fit: cover;
+}
+
+.hero-img-1 {
+  z-index: -2;
+  filter: blur(1rem);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-img-2 {
+  z-index: -1;
+  inset: 2rem;
+  width: calc(100% - 4rem);
+  height: calc(100% - 4rem);
+}
+
+section.hook-line {
+  display: grid;
+  place-items: center;
+  padding: 5rem;
+  height: 90vh;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.section-header {
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.section-img {
+  transform-style: preserve-3d;
+  transform: perspective(1000px);
+}
+
+/* .section-img img {
+  transform: rotateY(0);
+  transition: all 250ms ease;
+}
+
+.section-img:hover img {
+  transform: rotateY(-25deg);
+} */
+
+.loader-wrapper {
+  display: grid;
+  place-items: center;
+  height: 90vh;
+}
+
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  scale: 1.5;
+}
+
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #af99ff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #af99ff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
+  }
+}
+
+#stepPath {
+  fill: none;
+  stroke: white;
+  margin: 0 2rem;
+
+  --duration: 1000ms;
+  --delay: 250ms;
+}
+
+.steps {
+  stroke-width: 4px;
+  stroke: #af99ff;
+  stroke-dasharray: 0 100;
+}
+.aos-animate .steps {
+  animation: StepPath-1 var(--duration) ease-in-out forwards
+      calc(var(--duration) * 0 + var(--delay) * 0),
+    StepPath-2 var(--duration) ease-in-out forwards calc(var(--duration) * 1 + var(--delay) * 1),
+    StepPath-3 var(--duration) ease-in-out forwards calc(var(--duration) * 2 + var(--delay) * 2),
+    StepPath-4 var(--duration) ease-in-out forwards calc(var(--duration) * 3 + var(--delay) * 3);
+}
+.path-point {
+  fill: #1a202c;
+  stroke: #af99ff;
+}
+
+.aos-animate :is(.path-text-1, .path-point-1) {
+  opacity: 0;
+  animation: fadeIn var(--delay) ease forwards calc(var(--duration) * 0 + var(--delay) * 0);
+}
+.aos-animate :is(.path-text-2, .path-point-2, .path-point-3) {
+  opacity: 0;
+  animation: fadeIn var(--delay) ease forwards calc(var(--duration) * 1 + var(--delay) * 1);
+}
+.aos-animate :is(.path-text-3, .path-point-4, .path-point-5) {
+  opacity: 0;
+  animation: fadeIn var(--delay) ease forwards calc(var(--duration) * 2 + var(--delay) * 2);
+}
+.aos-animate :is(.path-text-4, .path-point-6) {
+  opacity: 0;
+  animation: fadeIn var(--delay) ease forwards calc(var(--duration) * 3 + var(--delay) * 3);
+}
+.aos-animate :is(.path-text-5, .path-point-7) {
+  opacity: 0;
+  animation: fadeIn var(--delay) ease forwards calc(var(--duration) * 4 + var(--delay) * 4);
+}
+
+@keyframes StepPath-1 {
+  from {
+    stroke-dasharray: 0 100;
+  }
+  to {
+    stroke-dasharray: 25 75;
+  }
+}
+@keyframes StepPath-2 {
+  from {
+    stroke-dasharray: 25 75;
+  }
+  to {
+    stroke-dasharray: 50 50;
+  }
+}
+@keyframes StepPath-3 {
+  from {
+    stroke-dasharray: 50 50;
+  }
+  to {
+    stroke-dasharray: 75 25;
+  }
+}
+@keyframes StepPath-4 {
+  from {
+    stroke-dasharray: 75 25;
+  }
+  to {
+    stroke-dasharray: 100 0;
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.reason-card {
+  display: grid;
+  aspect-ratio: 1 / 1;
+  place-items: center;
+  justify-content: center;
+  padding: 1em;
+  background-color: #b5d0ff;
+}
+@keyframes zoom-in-left {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+    transform-origin: left;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+    transform-origin: left;
   }
 }

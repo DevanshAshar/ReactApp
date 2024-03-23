@@ -15,6 +15,25 @@ const User = sequelize.define('User', {
     },
     password:{
         type:DataTypes.STRING
+    },
+    mobile:{
+        type:DataTypes.BIGINT
+    },
+    resume:{
+        type:DataTypes.STRING
+    },
+    role:{
+        type:DataTypes.STRING
+    },
+    description:{
+        type:DataTypes.STRING
+    },
+    skills:{
+        type:DataTypes.ARRAY(DataTypes.STRING)
+    },
+    detailsFilled:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false
     }
   },{
     timestamps: false
@@ -28,5 +47,5 @@ sequelize.sync({alter:true})
   })
   .catch(error => {
     console.error('Error synchronizing database:', error);
-  });
+});
 module.exports=User
