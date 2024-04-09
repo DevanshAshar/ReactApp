@@ -31,6 +31,7 @@ const Job= sequelize.define('Job', {
     totalApplicants:{
         type:DataTypes.STRING
     },
+    closed:{type:DataTypes.BOOLEAN,defaultValue:false},
     lat:{type:DataTypes.STRING},
     long:{type:DataTypes.STRING}
   },{

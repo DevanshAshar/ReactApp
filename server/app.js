@@ -3,15 +3,19 @@ const fastifyCookie = require('@fastify/cookie');
 const fastifyPassport = require('fastify-passport');
 const fastifySecureSession = require('@fastify/secure-session')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const {Multer}=require('./middleware/multer');
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+const fastifyFormBody=require('@fastify/formbody')
 const dotenv = require('dotenv').config();
+const jwt=require('jsonwebtoken')
 const fs = require('fs')
 const path = require('path')
 const cors = require('fastify-cors')
 const crypto = require('crypto');
 require('./dbConnect')
 fastify.register(cors, {});
-
+fastify.register(Multer.contentParser)
+// fastify.register(fastifyFormBody)
 //////////////////
 fastify.register(fastifySecureSession, {
   key: fs.readFileSync(path.join(__dirname,'not-so-secret-key')),
@@ -52,6 +56,7 @@ fastify.get('/auth/google/callback',
     {preValidation: fastifyPassport.authenticate('google',{scope:['profile','email']})},
     async (req,res) => {
       const sessionId = req.cookies['session'];
+      console.log(sessionId)
       const user=req.user
       const checkUser=await User.findOne({
         where:{
@@ -73,7 +78,9 @@ fastify.get('/auth/google/callback',
   }
     else
     {
+      const token = jwt.sign({id:checkUser.id},process.env.SECRET_KEY);
       res.header('Set-Cookie', [
+        `sessionid=${token};Path=/`,
         `user=${JSON.stringify(checkUser)}; Path=/;`
       ]);
     }
@@ -90,12 +97,7 @@ fastify.get('/auth/linkedin/callback',
 fastify.get('/login', fastifyPassport.authenticate('google', {scope: ['profile','email']}))
 fastify.get('/login/linkedin', fastifyPassport.authenticate('linkedin', { scope: ['r_liteprofile', 'r_emailaddress'] }));
 
-fastify.get('/logout',
-    async(req,res) => {
-        req.logout()
-        return {success:true}
-    }
-)
+
 
 ///////////////
 
@@ -104,6 +106,7 @@ const userRoutes=require('./routes/user')
 const jobRoutes=require('./routes/job')
 const jobAppRoutes=require('./routes/jobApp');
 const User = require('./models/user');
+
 
 fastify.register(userRoutes,{ prefix: "/user" })
 // fastify.register(authRoutes)

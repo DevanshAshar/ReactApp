@@ -2,7 +2,10 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../dbConnect');
 
 const JobApp = sequelize.define('JobApp', {
-    
+    status:{
+      type:DataTypes.STRING,
+      defaultValue:'under review' //shortlisted,rejected
+    }
 },{
     timestamps: false
 } );

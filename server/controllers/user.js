@@ -1,6 +1,13 @@
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 const User=require('../models/user')
+const fs=require('fs')
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret
+});
 const userRegister = async(req,res) => {
     try{
         const {firstName,lastName,username,email,password,role}=req.body
@@ -71,4 +78,45 @@ const getUsers=async(req,res)=>{
     }
 }
 
-module.exports={userRegister,getUsers,userLogin,getParticularUser,auth}
+const updateUser=async(req,res)=>{
+    try {
+        const {firstName,lastName,mobile,description,skills,email}=req.body
+        const userDt=await User.update(
+            req.body,
+            {where:{
+                id:userData.id
+            }}
+        )
+        return res.code(200).send(userDt)
+    } catch (error) {
+        res.code(400).send(error.message);
+    }
+}
+
+const uploadRezume=async(req,res)=>{
+    try {
+        const path='E://Devansh//Project//ReactApp//server//middleware//rezume.pdf'
+        const result = await cloudinary.uploader.upload(path, {
+            resource_type: 'raw', public_id: 'rezzumee'
+          });
+        console.log(result)
+        const user = await User.update(
+            { resume: result.secure_url },
+            {where:{
+                id:userData.id
+            }}
+          );
+          fs.unlink(path, (err) => {
+            if (err) {
+              console.error('Error deleting file:', err);
+              return;
+            }
+            console.log('File deleted successfully');
+          });
+        return res.code(200).send({ message: 'Resume uploaded successfully', user:user,result:result});
+    } catch (error) {
+        res.code(400).send(error);
+    }
+}
+
+module.exports={userRegister,getUsers,userLogin,getParticularUser,auth,updateUser,uploadRezume}

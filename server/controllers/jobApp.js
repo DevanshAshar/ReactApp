@@ -1,6 +1,8 @@
 const User=require('../models/user')
 const Job=require('../models/job')
-const jobApp=require('../models/jobApp')
+const jobApp=require('../models/jobApp');
+// const JobApp = require('../models/jobApp');
+
 const createJobApp=async(req,res)=>{
     const { jobId } = req.body;
     console.log(req.body)
@@ -43,4 +45,64 @@ const getAllJobApps = async (req, res) => {
       return res.code(500).send({ success: false, error: error.message });
     }
   };
-module.exports={createJobApp,getAllJobApps}
+  const getJobAppCount=async(req,res)=>{
+    try {
+      const jobs=await jobApp.findAll({
+        where:{
+          JobId:req.params.id
+        }
+      })
+      res.code(200).send(jobs.length)
+    } catch (error) {
+      console.error('Error fetching JobApps:', error);
+      return res.code(500).send({ success: false, error: error.message });
+    }
+  }
+  const getApplied=async(req,res)=>{
+    try {
+      const app=await jobApp.findAll({
+        where:{
+          JobId:req.params.id
+        },
+        include: [{
+          model: User
+      }]
+      })
+      res.code(200).send(app)
+    } catch (error) {
+      console.log(error.message)
+      return res.code(400).send({error:error.message})
+    }
+  }
+  const getMyApplied=async(req,res)=>{
+    try {
+      const app=await jobApp.findAll({
+        where:{
+          UserId:req.params.id
+        },
+        include: [{
+          model: Job
+      }]
+      })
+      res.code(200).send(app)
+    } catch (error) {
+      console.log(error.message)
+      return res.code(400).send({error:error.message})
+    }
+  }
+  const getUpdated=async(req,res)=>{
+    try {
+      const {status,appId}=req.body
+      const app=await jobApp.update(
+        req.body,
+        {where:{
+            id:appId
+        }}
+    )
+    res.code(200).send(app)
+    } catch (error) {
+      console.log(error.message)
+      return res.code(400).send({error:error.message})
+    }
+  }
+module.exports={createJobApp,getAllJobApps,getJobAppCount,getApplied,getMyApplied,getUpdated}

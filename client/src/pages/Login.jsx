@@ -29,9 +29,10 @@ export default function Login() {
         user:data.user,
         token:data.token
       })
+    //   console.log(auth)
       localStorage.setItem('auth',JSON.stringify(data))
       toast.success('Signed In Successfully')
-      navigate('/user/dashboard')
+      navigate('/user/applications')
     } catch (error) {
       toast.error('Something went wrong')
       console.log(error.message)

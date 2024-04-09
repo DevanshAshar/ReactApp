@@ -8,7 +8,7 @@ const hrefmap = {
   "Contact us": "contact",
   "Sign Up": "signup",
   "Sign In": "login",
-  "Dashboard":"user/dashboard"
+  "Dashboard":"user/applications"
 };
 
 const Nav = ({ children }) => (
@@ -28,14 +28,19 @@ export default function Navbar() {
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-const navigate=useNavigate()
- const [auth,setAuth]=useAuth()
+  const navigate = useNavigate();
+  const [auth, setAuth] = useAuth();
 
   const dealingWithLogout = async () => {
-    setAuth(null)
-    toast.success('Logged Out')
-    navigate('/login')
+    setAuth(null);
+    localStorage.removeItem(auth)
+    document.cookie="session=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;"
+    document.cookie="sessionid=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;"
+    document.cookie="user=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;"
+    toast.success("Logged Out");
+    navigate("/login");
   };
+
   return (
     <nav className="navbar">
       <div className="nav-container">
@@ -46,24 +51,35 @@ const navigate=useNavigate()
         </div>
 
         <div className="nav-links">
-          <div className={`menu-icon ${isOpen && "open"}`} onClick={toggleMenu}>
+          <div
+            className={`menu-icon ${isOpen && "open"}`}
+            onClick={toggleMenu}
+          >
             <div className="bar"></div>
             <div className="bar"></div>
             <div className="bar"></div>
           </div>
 
           <div className={`menu-items ${isOpen && "open"}`}>
-            {auth?.user ? (
+            {!auth?.user ? (
               <>
-                <Nav>About us</Nav>
-                <Nav>Dashboard</Nav>
-                <div style={{cursor:"pointer"}} onClick={dealingWithLogout}>Logout</div>
-              </>
-            ) : (
-              <>
+              <div style={{ flex: "1",marginLeft:'75vw' }}></div>
                 <Nav>About us</Nav>
                 <Nav>Sign Up</Nav>
                 <Nav>Sign In</Nav>
+                
+              </>
+            ) : (
+              <>
+                <div style={{ flex: "1",marginLeft:'75vw' }}></div>
+                <Nav>About us</Nav>
+                <Nav>Dashboard</Nav>
+                <div
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                  onClick={dealingWithLogout}
+                >
+                  Logout
+                </div>
               </>
             )}
           </div>

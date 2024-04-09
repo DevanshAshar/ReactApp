@@ -19,7 +19,6 @@ const AuthProvider=({children})=>{
                 });
             } catch (error) {
                 console.error('Error parsing JSON:', error);
-                // Handle error appropriately, e.g., fallback to default values
             }
         }
         //eslint-disable-next-line

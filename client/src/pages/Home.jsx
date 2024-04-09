@@ -9,9 +9,8 @@ export default function Home() {
     Aos.init({ duration: 1000, once: true, easing: "ease" });
   }, []);
   useEffect(() => {
-    const token = Cookies.get('session');
+    const token = Cookies.get('sessionid');
     const user= Cookies.get('user')
-    console.log(user)
     if(token && user)
     setAuth({
       ...auth,
@@ -440,6 +439,7 @@ export default function Home() {
               borderRadius: "10%",
               textAlign: "center",
               width: "250px",
+              height:"275px"
             }}
             data-aos="fade-right"
             data-aos-delay="200"
@@ -466,11 +466,11 @@ export default function Home() {
                   borderColor: "#453d65",
                   borderRadius: "10%",
                   backgroundColor: "#453d65",
-                  padding: "1.5rem 3rem",
+                  padding: "1rem",
                   fontSize: "2xl",
                   textDecoration: "none",
                   width: "150px",
-                  height: "20px",
+                  // height: "10px",
                   color: "white",
                   marginTop: "2rem",
                   display: "inline-block",
@@ -493,11 +493,11 @@ export default function Home() {
                   borderColor: "#453d65",
                   borderRadius: "10%",
                   backgroundColor: "#453d65",
-                  padding: "1.5rem 3rem",
+                  padding: "1rem",
                   fontSize: "2xl",
                   textDecoration: "none",
                   width: "150px",
-                  height: "20px",
+                  // height: "20px",
                   color: "white",
                   marginTop: "2rem",
                   display: "inline-block",
