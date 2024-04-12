@@ -31,7 +31,7 @@ const MyApplied = () => {
         const fetchAppliedCount = async () => {
             if (selectedJob) {
                 try {
-                    const res = await axios.get(`http://localhost:8080/jobApp/appliedCt/${selectedJob.id}`);
+                    const res = await axios.get(`http://localhost:8080/jobApp/appliedCt/${selectedJob.JobId}`);
                     if (res.status === 200) {
                         setAppliedCount(res.data);
                     }
@@ -118,11 +118,9 @@ const MyApplied = () => {
                         <p>{selectedJob.Job.workLoc}</p>
                         <p>Skills Required: {selectedJob.Job.skillsReqd.join(', ')}</p>
                         <p>{appliedCount} candidates have applied</p>
-                        {selectedJob && isApplied(selectedJob.id) ? (
+                        {
                             <button className='btn btn-success'>Applied</button>
-                        ) : (
-                            <button onClick={handleApply} className='btn btn-success'>Apply</button>
-                        )}
+                        }
                     </div>
                 )}
             </Modal>

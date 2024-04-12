@@ -26,7 +26,38 @@ const PastPostings = () => {
     };
     if (auth) getPast();
   }, [auth]);
-
+  const closeJob=async(id)=>{
+    try {
+        const res=await axios.post(`http://localhost:8080/job/closeJob/${id}`)
+        if(res.status===200)
+        {
+            const updatedPostings = postings.map((job) =>
+          job.id === id ? { ...job, closed: !job.closed } : job
+        );
+        setPostings(updatedPostings);
+            toast.success('Closed Successfully')
+    }
+    } catch (error) {
+        console.log(error);
+        toast.error("Job Closed");
+    }
+  }
+  const openJob=async(id)=>{
+    try {
+        const res=await axios.post(`http://localhost:8080/job/openJob/${id}`)
+        if(res.status===200)
+       {
+        const updatedPostings = postings.map((job) =>
+          job.id === id ? { ...job, closed: !job.closed } : job
+        );
+        setPostings(updatedPostings);
+        toast.success('Opened Successfully')
+    }
+    } catch (error) {
+        console.log(error);
+        toast.error("Job Opened");
+    }
+  }
   return (
     <Layout>
       <div className="container-fluid p-3 m-3">
@@ -63,7 +94,7 @@ const PastPostings = () => {
                           <Button
                             type="primary"
                             style={{ backgroundColor: "red" }}
-                            onClick={() => console.log("close")}
+                            onClick={() => closeJob(job.id)}
                           >
                             Close
                           </Button>
@@ -71,7 +102,7 @@ const PastPostings = () => {
                           <Button
                             type="primary"
                             style={{ backgroundColor: "green" }}
-                            onClick={() => console.log("open")}
+                            onClick={() => openJob(job.id)}
                           >
                             Open
                           </Button>

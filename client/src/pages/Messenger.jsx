@@ -48,6 +48,7 @@ const Messenger = () => {
     try {
       const res = await axios.post(`http://localhost:8080/user/userData`,{userId:otherUserId});
       setChattingWithName(res.data.firstName); 
+      localStorage.removeItem('chatt')
     } catch (error) {
       console.log(error.message);
     }

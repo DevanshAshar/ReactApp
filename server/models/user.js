@@ -4,14 +4,14 @@ const JobApp = require('./jobApp');
 const User = sequelize.define('User', {
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false
+      // allowNull: false
     },
     lastName: {
       type: DataTypes.STRING
     },
     email:{
         type:DataTypes.STRING,
-        unique:true
+        // unique:true
     },
     password:{
         type:DataTypes.STRING

@@ -20,7 +20,7 @@ const userRegister = async(req,res) => {
             role:role
         });
         await register.save();
-        const token = jwt.sign({id:data.id},process.env.SECRET_KEY);
+        const token = jwt.sign({id:register.id},process.env.SECRET_KEY);
         res.code(200).send({message:'Success',user:register,token:token});
     }catch(err){
         res.code(400).send(err.message);
