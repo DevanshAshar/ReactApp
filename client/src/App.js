@@ -13,6 +13,7 @@ import Applied from './pages/Applied';
 import PastPostings from './pages/PastPostings';
 import MyApplied from './pages/MyApplied';
 import AboutUs from './pages/AboutUs';
+import Messenger from './pages/Messenger';
 function App() {
   return (
     <div className="App">
@@ -24,6 +25,7 @@ function App() {
         <Route path='/user' element={<Private/>}>
           <Route path='profile' element={<Profile/>}/>
           <Route path='applications' element={<Applications/>}/>
+          <Route path='chats' element={<Messenger/>}/>
         </Route>
         <Route path='pastPostings' element={<PastPostings/>}/>
         <Route path='applied/:id' element={<Applied/>}/>

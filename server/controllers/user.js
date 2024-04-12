@@ -118,5 +118,14 @@ const uploadRezume=async(req,res)=>{
         res.code(400).send(error);
     }
 }
-
-module.exports={userRegister,getUsers,userLogin,getParticularUser,auth,updateUser,uploadRezume}
+const particularUser=async(req,res)=>{
+    try {
+      const {userId}=req.body
+      const user=await User.findByPk(userId)
+      res.code(200).send(user)
+    } catch (error) {
+      console.log(error.message);
+        res.status(400).json({ message: error.message });
+    }
+  }
+module.exports={userRegister,getUsers,userLogin,getParticularUser,auth,updateUser,uploadRezume,particularUser}

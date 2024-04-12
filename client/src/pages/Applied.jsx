@@ -3,15 +3,16 @@ import Layout from '../components/Layout/Layout';
 import RecruiterMenu from '../components/Layout/RecruiterMenu';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useNavigate } from 'react-router-dom';
 import { Table, Input, Button, Space, Modal, Select } from 'antd';
 import { useAuth } from '../context/auth';
 
 const { Option } = Select;
 
 const Applied = () => {
-    const [auth,setAuth]=useAuth()
+    const [auth, setAuth] = useAuth();
     const params = useParams();
+    const navigate=useNavigate()
     const [appliedCandidates, setAppliedCandidates] = useState([]);
     const [filteredCandidates, setFilteredCandidates] = useState([]);
     const [searchText, setSearchText] = useState('');
@@ -41,12 +42,24 @@ const Applied = () => {
         setFilteredCandidates(filteredData);
     };
 
-    const handleStatusChange = async(appId, status) => {
+    const handleStatusChange = async (appId, status) => {
         try {
-            const res=await axios.post(`http://localhost:8080/jobApp/updateApp`,{appId,status})
-            if(res.code==200){toast.success('Status updated')}
+            const res = await axios.post(`http://localhost:8080/jobApp/updateApp`, { appId, status });
+            if (res.code === 200) { toast.success('Status updated') }
         } catch (error) {
-            toast.error('Couldnt update status')
+            toast.error('Could not update status')
+        }
+    };
+
+    const handleConnect = async (userId) => {
+        try {
+            const res = await axios.post('http://localhost:8080/convo/createConvo', { userId });
+            const newConversation = res.data;
+            console.log(newConversation)
+            localStorage.setItem('chatt',JSON.stringify(newConversation))
+            navigate(`/user/chats`);
+        } catch (error) {
+            toast.error('Failed to create conversation');
         }
     };
 
@@ -95,6 +108,13 @@ const Applied = () => {
                     {statusOptions.map(option => <Option key={option} value={option}>{option}</Option>)}
                 </Select>
             ),
+        },
+        {
+            title: 'Connect',
+            key: 'connect',
+            render: (text, record) => (
+                <Button type="primary" onClick={() => handleConnect(record.User.id)}>Connect</Button>
+            ),
         }
     ];
 
@@ -119,7 +139,7 @@ const Applied = () => {
                         <RecruiterMenu />
                     </div>
                     <div className="col-md-9">
-                        <h2 style={{color:'white'}}>Applied Candidates</h2>
+                        <h2 style={{ color: 'white' }}>Applied Candidates</h2>
                         <Input.Search
                             placeholder="Search candidates"
                             onChange={(e) => handleSearch(e.target.value)}
