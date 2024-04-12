@@ -37,20 +37,22 @@ const Messenger = () => {
 //       console.log(users);
 //     });
 //   }, [user]);
-    useEffect(async()=>{
+    useEffect(()=>{
         if(localStorage.getItem('chatt'))
         {
             const curConv=JSON.parse(localStorage.getItem('chatt'))
             setCurrentChat(curConv)
             // console.log(currentChat)
             const otherUserId =curConv.userId1 === user.id ? curConv.userId2 : curConv.userId1;
-
+            const fetchData=async()=>{
     try {
       const res = await axios.post(`http://localhost:8080/user/userData`,{userId:otherUserId});
       setChattingWithName(res.data.firstName); 
     } catch (error) {
       console.log(error.message);
     }
+}
+fetchData()
         }
     },[])
   useEffect(() => {
